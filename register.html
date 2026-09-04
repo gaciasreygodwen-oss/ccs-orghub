@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register</title>
   <link href="./output.css" rel="stylesheet">
-  <!-- Include Supabase -->
+  
+  <!-- Load Supabase Library FIRST -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Load config.js SECOND -->
   <script src="config.js"></script>
 </head>
 <body style="margin: 0; overflow: hidden; font-family: Arial, sans-serif;">
@@ -87,8 +89,8 @@
         return;
       }
 
-      // Sign up with Supabase
-      const { data, error } = await supabase.auth.signUp({
+      // Use window.supabaseClient (Created in config.js)
+      const { data, error } = await window.supabaseClient.auth.signUp({
         email: email,
         password: pass,
         options: {
