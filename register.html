@@ -56,7 +56,7 @@
     </form>
   </div>
 
-  <script>
+   <script>
     // Toggle password visibility logic
     const toggleRegPassword = document.getElementById('toggleRegPassword');
     const regPassword = document.getElementById('regPassword');
@@ -87,29 +87,37 @@
         return;
       }
 
-      // Sign up with Supabase
-      const { data, error } = await supabase.auth.signUp({
-        email: email,
-        password: pass,
-        options: {
-          data: {
-            first_name: firstName,
-            last_name: lastName
-          }
-        }
-      });
+      // VIBE CHECK: Ensure Supabase client is actually loaded
+      if (typeof supabase === 'undefined') {
+        alert("Database connection error! Please make sure your config.js has your correct Supabase keys.");
+        return;
+      }
 
-      if (error) {
-        alert("Registration Error: " + error.message);
-      } else {
-        if (data.user && data.user.identities && data.user.identities.length === 0) {
-           alert("Email already registered. Please log in.");
+      try {
+        // Sign up with Supabase
+        const { data, error } = await supabase.auth.signUp({
+          email: email,
+          password: pass,
+          options: {
+            data: {
+              first_name: firstName,
+              last_name: lastName
+            }
+          }
+        });
+
+        if (error) {
+          alert("Registration Error: " + error.message);
         } else {
-           alert("Registration successful! Please check your email to confirm your account.");
-           window.location.href = 'index.html';
+          // If you disabled email confirmations, it logs them right in!
+          alert("Registration successful! Redirecting you to login...");
+          window.location.href = 'index.html';
         }
+      } catch (err) {
+        alert("Unexpected error: " + err.message);
       }
     });
   </script>
+
 </body>
 </html>

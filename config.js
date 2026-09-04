@@ -1,6 +1,6 @@
 // config.js
-const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+const SUPABASE_URL = "https://tlwxoifwjbjebetonlgb.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_MrQpBMvzZg6hEs94JI_LmA_TLO9x4UF";
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
