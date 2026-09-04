@@ -107,13 +107,22 @@
           }
         });
 
+        
         if (error) {
-          alert("Registration Error: " + error.message);
-        } else {
-          // If you disabled email confirmations, it logs them right in!
-          alert("Registration successful! Redirecting you to login...");
-          window.location.href = 'index.html';
-        }
+  console.error("SIGN UP ERROR:", error);
+  alert("Registration Error: " + error.message);
+} else {
+  console.log("SIGN UP DATA:", data);
+
+  alert(
+    "SUCCESS!\n\n" +
+    "User ID: " + (data.user?.id || "NONE") + "\n" +
+    "Email: " + (data.user?.email || "NONE") + "\n" +
+    "Session: " + (data.session ? "YES" : "NO")
+  );
+}
+
+
       } catch (err) {
         alert("Unexpected error: " + err.message);
       }
