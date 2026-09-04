@@ -74,7 +74,7 @@
         // Check if profile exists in database, if not, create one
         const { data: existingProfile } = await supabase
             .from('student_profiles')
-            .select('id')
+            .select('id, role')
             .eq('id', data.user.id)
             .single();
 
