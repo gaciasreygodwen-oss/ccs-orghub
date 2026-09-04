@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <link href="./output.css" rel="stylesheet">
+  <!-- Include Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+</head>
+<body style="margin: 0; overflow: hidden; font-family: Arial, sans-serif;">
+
+  <!-- Background Video -->
+  <video autoplay loop muted playsinline style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+    <source src="src/Fco-bg.mov">
+  </video>
+
+  <!-- Dark Overlay -->
+  <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: rgba(0,0,0,0.4);"></div>
+
+  <!-- Header -->
+  <header style="position: fixed; top: 0; left: 0; right: 0; z-index: 3; padding: 20px 40px; background: rgba(94, 14, 91, 0.3); display: flex; justify-content: space-between; align-items: center;">
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <a href="index.html" class="logo-link"></a>
+      <img src="src/logo.png" alt="ESSU Logo" style="height: 50px; width: auto;">
+      <img src="src/ccs.png" alt="ESSU Logo" style="height: 50px; width: auto;">
+      <span style="color: rgba(255, 255, 255, 0.6);">CCS ORGHUB</span>
+    </div>
+  </header>
+
+  <!-- Register Form -->
+  <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2; background: rgba(255,255,255,0.15); padding: 30px 40px; border-radius: 20px; width: 350px; text-align: center;">
+    <h1 style="color: white; margin-bottom: 20px; margin-top: 0;">Create an Account</h1>
+
+    <form id="registerForm" style="display: flex; flex-direction: column; gap: 12px;">
+      <input type="text" id="firstName" placeholder="First Name" required style="width: 100%; padding: 12px; border-radius: 12px; border: none; background: rgba(255,255,255,0.9); box-sizing: border-box;">
+      <input type="text" id="lastName" placeholder="Last Name" required style="width: 100%; padding: 12px; border-radius: 12px; border: none; background: rgba(255,255,255,0.9); box-sizing: border-box;">
+      <input type="email" id="regEmail" placeholder="Email" required style="width: 100%; padding: 12px; border-radius: 12px; border: none; background: rgba(255,255,255,0.9); box-sizing: border-box;">
+
+      <div style="position: relative;">
+        <input type="password" id="regPassword" placeholder="Password" required style="width: 100%; padding: 12px; border-radius: 12px; border: none; background: rgba(255,255,255,0.9); box-sizing: border-box; padding-right: 60px;">
+        <button type="button" id="toggleRegPassword" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 12px; color: #4a2f2f; font-weight: bold;">Show</button>
+      </div>
+
+      <div style="position: relative;">
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required style="width: 100%; padding: 12px; border-radius: 12px; border: none; background: rgba(255,255,255,0.9); box-sizing: border-box; padding-right: 60px;">
+        <button type="button" id="toggleConfirmPassword" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 12px; color: #4a2f2f; font-weight: bold;">Show</button>
+      </div>
+
+      <button type="submit" style="width: 100%; padding: 12px; border-radius: 12px; border: none; background: #8f228b; color: white; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 5px;">Sign Up</button>
+
+      <p style="color: white; margin-top: 10px; margin-bottom: 0;">
+        Already have an account? <a href="index.html" style="color: #bc54c9; text-decoration: none; font-weight: bold;">Log In</a>
+      </p>
+    </form>
+  </div>
+
+  <script>
+    // Toggle password visibility logic
+    const toggleRegPassword = document.getElementById('toggleRegPassword');
+    const regPassword = document.getElementById('regPassword');
+    toggleRegPassword.addEventListener('click', function() {
+      regPassword.type = regPassword.type === 'password' ? 'text' : 'password';
+      this.textContent = regPassword.type === 'password' ? 'Show' : 'Hide';
+    });
+
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const confirmPassword = document.getElementById('confirmPassword');
+    toggleConfirmPassword.addEventListener('click', function() {
+      confirmPassword.type = confirmPassword.type === 'password' ? 'text' : 'password';
+      this.textContent = confirmPassword.type === 'password' ? 'Show' : 'Hide';
+    });
+
+    // Registration form submission with Supabase
+    document.getElementById('registerForm').addEventListener('submit', async function(event) {
+      event.preventDefault(); 
+      
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const email = document.getElementById('regEmail').value;
+      const pass = document.getElementById('regPassword').value;
+      const confirmPass = document.getElementById('confirmPassword').value;
+      
+      if (pass !== confirmPass) {
+        alert("Passwords do not match!");
+        return;
+      }
+
+      // Sign up with Supabase
+      const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: pass,
+        options: {
+          data: {
+            first_name: firstName,
+            last_name: lastName
+          }
+        }
+      });
+
+      if (error) {
+        alert("Registration Error: " + error.message);
+      } else {
+        if (data.user && data.user.identities && data.user.identities.length === 0) {
+           alert("Email already registered. Please log in.");
+        } else {
+           alert("Registration successful! Please check your email to confirm your account.");
+           window.location.href = 'index.html';
+        }
+      }
+    });
+  </script>
+</body>
+</html>
