@@ -50,20 +50,8 @@
   </div>
 
   <script>
-    // Toggle password visibility
-    const togglePassword = document.getElementById('togglePassword');
-    const password = document.getElementById('password');
-    togglePassword.addEventListener('click', function() {
-      if (password.type === 'password') {
-        password.type = 'text';
-        this.textContent = 'Hide';
-      } else {
-        password.type = 'password';
-        this.textContent = 'Show';
-      }
-    });
+    // ... (toggle password visibility code here) ...
 
-    // Login form submission
     document.getElementById('loginForm').addEventListener('submit', async function(event) {
       event.preventDefault(); 
       
@@ -77,19 +65,34 @@
       });
 
       if (error) {
-        alert('Invalid email or password. Please try again.');
+        alert('Invalid email or password.');
       } else {
-        // Store session if needed (optional)
+        // Save email for the dashboard
         sessionStorage.setItem('userEmail', email);
         
-        // Check if admin
-        if (email === 'admin@essu.edu.ph') {
-          window.location.href = 'dashboard.html';
-        } else {
-          window.location.href = 'dashboard.html';
+        // Check if profile exists in database, if not, create one
+        const { data: existingProfile } = await supabase
+            .from('student_profiles')
+            .select('id')
+            .eq('id', data.user.id)
+            .single();
+
+        if (!existingProfile) {
+            await supabase.from('student_profiles').insert({
+                id: data.user.id,
+                email: data.user.email,
+                first_name: data.user.user_metadata?.first_name || '',
+                last_name: data.user.user_metadata?.last_name || '',
+                role: email === 'admin@essu.edu.ph' ? 'admin' : 'student'
+            });
+        } else if (email === 'admin@essu.edu.ph' && existingProfile.role !== 'admin') {
+            // Ensure the admin account is actually an admin in the DB
+            await supabase.from('student_profiles').update({ role: 'admin' }).eq('id', data.user.id);
         }
+
+        window.location.href = 'dashboard.html';
       }
     });
-  </script>
+</script>
 </body>
 </html>
