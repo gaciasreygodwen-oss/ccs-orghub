@@ -1,4 +1,4 @@
-// config.js
+
 const SUPABASE_URL = "https://tlwxoifwjbjebetonlgb.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_MrQpBMvzZg6hEs94JI_LmA_TLO9x4UF";
 
