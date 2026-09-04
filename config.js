@@ -1,8 +1,8 @@
 
 const SUPABASE_URL = "https://tlwxoifwjbjebetonlgb.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsd3hvaWZ3amJqZWJldG9ubGdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MDAyOTUsImV4cCI6MjEwNDA3NjI5NX0.iZRENiJByVri8g1cJi84PS9s7h8fxZWKa_qbolJeK6U";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsd3hvaWZ3amJqZWJldG9ubGdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MDAyOTUsImV4cCI6MjEwNDA3NjI5NX0.iZRENiJByVri8g1cJi84PS9s7h8fxZWKa_qbolJeK6Ug";
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Helper to check if the current user is an Admin
 async function isAdmin() {
